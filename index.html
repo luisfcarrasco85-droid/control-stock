@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta  name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Kiosco - Stock</title>
+	<link rel="stylesheet" href="style.css">
+	
+</head>
+
+<body>
+
+<div id="app-container">
+
+<header class="app-header">
+<h1>Control de Stock</h1>
+</header>
+
+<section class="config-section">
+	<button id="btn-modo"onclick="toggleModo()">🌙 Modo oscuro</button>
+	<label style="margin-left:10px;"> Color principal: <input type="color"id="colorPicker"></label>
+</section>
+
+<section>
+	<h2>Agregar producto</h2>
+	<input id="categoria" placeholder="Categoría (ej: Bebidas)">
+	<input id="producto" placeholder="Producto (ej: Manaos)">
+	<input id="variante" placeholder="Variante (ej: Cola 3L)">
+	<input id="precio" type="number" placeholder="Precio">
+	<input id="stock" type="number" placeholder="Stock">
+	<input id="min" type="number" placeholder="Stock mínimo">
+	<button onclick="agregarProducto()">Agregar</button>
+</section>
+
+<section>
+	<input
+		tipe="text"
+		id="buscador"
+		placeholder="Buscar producto..."
+		oninput="filtrarProductos()"
+	/>
+	<div id="sin-resultados" style="display: none;">
+		No se encontraron productos
+	</div>
+	<h2>Productos</h2>
+	<div id="lista"></div>
+	
+</section>
+
+<section class="caja.section">
+	<h3>Caja</h3>
+	<button onclick="iniciarTurno()">Iniciar turno</button>
+	<button onclick="cerrarTurno()">Cerrar turno</button>
+	<div id="caja"></div>
+</section>
+
+<section>
+	<h2>Historial de ventas</h2>
+	<div id="historial-ventas"></div>
+	<div class="acciones">
+	<button onclick="exportarTurnoTXT()">
+	📄 Exportar turno TXT
+	</button>
+	</div>
+</section>
+
+<section>
+	<h2>Resumen semanal</h2>
+
+	<select id="anio-semana"></select>
+	<select id="semana"></select>
+
+	
+	<div id="resumen-semanal"></div>
+	<div class="acciones">
+	<button onclick="mostrarResumenSemanal()">
+	📊 Ver resumen semanal
+	</button>
+	<button onclick="exportarResumenSemanalTXT()">
+	📄 Exportar resumen semanal TXT
+	</button>
+	<button onclick="exportarResumenSemanalPDF()">
+	🖨 Exportar resumen semanal PDF
+	</button>
+	</div>
+</section>
+
+<section>
+	<h2>Resumen mensual</h2>
+
+	<select id="mes"></select>
+	<select id="anio"></select>
+	
+	<div id="resumen-mensual"></div>
+	
+	<div class="acciones">
+	<button onclick="mostrarResumenMensual()">
+	📊 Ver resumen mensual
+	</button>
+	<button onclick="exportarResumenMensualTXT()">
+	📄 Exportar resumen mensual TXT
+	</button>
+	<button onclick="exportarResumenMensualPDF()">
+	🖨 Exportar resumen mensual PDF
+	</button>
+</div>
+</section>
+
+<section>
+	<h2 id="titulo-resumen">Resumen del turno</h2>
+	<div id="resumen-turno"></div>
+</section>
+	
+
+<script src="app.js"></script>
+
+</div>
+
+</body>
+
+</html>

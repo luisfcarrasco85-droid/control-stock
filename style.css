@@ -1,0 +1,390 @@
+:root{
+	--bg-main: #f8fafc;
+	--bg-gradient-start: #ffffff;
+	--bg-gradient-end: #f1f5f9;
+	--bg-section: #ffffffcc;
+	--bg-card: #f1f5f9;
+	--bg-input: #ffffff;
+	
+	--border-color: #cbd5e1;
+
+	--text-main: #1f2937;
+
+	--primary: #2563eb;
+ 
+	--success: #16a34a;
+
+	--danger: #dc2626;
+
+	--warning-bg: #fef3c7;
+
+	--shadow-soft: 0 4px 6px rgba(0,0,0,0.1);
+	--shadow-card: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+*, *::before, *::after{
+	box-sizing: border-box;
+}
+
+section h2 {
+	margin-top: 1.5rem;
+}
+
+body.dark{
+	--bg-main: #0f172a;
+	--bg-gradient-start: #0f172a;
+	--bg-gradient-end: #020617;
+	--bg-section: #020617cc;
+	--bg-card: #020617;
+	--bg-input: #111827;
+
+	--border-color: #374151;
+
+	--text-main: #f9fafb;
+
+	--warning-bg: #451a03;
+}
+
+body{
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end));
+	margin: 0;
+	padding: 0;
+	color: var(--text-main);
+}
+
+#app-container{
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+#resumen-turno{
+	margin-top: 30px;
+}
+
+.resumen-activo{
+	outline: 2px solid var(--primary);
+	animation: flash 0.8s ease;
+}
+
+@keyframes flash {
+	0% { background: transparent; }
+	50% { background: rgba(0,0,0,0.08); }
+	100% {background: transparent; }
+}
+
+#buscador{
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 15px;
+	font-size: 1rem;
+	border-radius: 8px;
+	border: 1px solid var(--border-color);
+}
+
+#sin-resultados{
+	text-align: center;
+	padding: 20px;
+	font-size: 1rem;
+	opacity: 0.7;
+	color: var(--text-main);
+}
+
+h1{
+	margin-top: 0;
+}
+
+.config-section{
+	background: transparent;
+	box-shadow: none;
+	padding: 10px 0 20px;
+}
+
+section{
+	margin-bottom: 40px;
+	background: var(--bg-section);
+	border-radius: 10px;
+	padding: 20px;
+	box-shadow: var(--shadow-soft);
+}
+
+section + section{
+	border-top: 1px solid var(--border-color);
+}
+
+input{
+	padding: 8px 10px;
+	margin: 5px;
+	border: 1px solid var(--border-color);
+	background: var(--bg-input);
+	color: var(--text-main);
+	border-radius: 6px;
+	font-size: 1rem;
+}
+
+button{
+	padding: 8px 12px;
+	margin: 5px 2px;
+	border: none;
+	border-radius: 6px;
+	font-size: 0.95rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+button:active{
+	transform: scale(0.97);
+}
+
+button:disabled{
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+button.vender{
+	background-color: var(--primary);
+	color: white;
+}
+button.vender:hover{
+	filter:brightness(0.9);
+}
+
+
+.producto-card{
+	gap: 8px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background: var(--bg-card);
+	border-radius: 8px;
+	padding: 12px;
+	margin: 6px 0;
+	box-shadow: var(--shadow-card);
+	position: relative;
+}
+
+.producto-info{
+	margin-bottom: 8px;
+}
+
+.producto-buttons{
+	display: flex;
+	gap: 6px;
+}
+
+.producto-buttons button{
+	flex: 1;
+}
+
+.sin-stock{
+	color: var(--danger);
+	font-weight: bold;
+}
+
+.stock-bajo{
+	color: #b45309;
+	font-weight: bold;
+}
+
+.categoria-titulo{
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 1.1rem;
+	letter-spacing: 0.3px;
+	padding: 8px;
+	margin-top: 10px;
+	background-color: color-mix(in srgb, var(--primary) 20%, white);
+	border-radius: 6px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+body.dark .categoria-titulo{
+	background-color: var(--primary);
+}
+
+.categoria-titulo:hover{
+	opacity: 0.85;
+}
+
+
+section.caja-section{
+	margin-bottom: 8px;
+	font-size: 1.1rem;
+	opacity: 0.8;
+}
+
+#caja{
+	margin-top: 25px;
+	background: var(--warning-bg);
+	padding: 15px;
+	border-left: 6px solid var(--primary);
+	border-radius: 8px;
+	font-weight: bold;
+	box-shadow: var(--shadow-card);
+}
+
+@media screen and (max-width: 600px){
+	h1{
+		text-align: center;
+		font-size: 1.4rem;
+	}
+
+	section{
+		padding: 15px;
+	}
+
+	input,
+	button{
+		width: 100%;
+		box-sizing: border-box;
+		margin: 6px 0;
+		font-size: 1rem;
+	}
+
+	.producto-card{
+		font-size: 0.95rem;
+	}
+
+	.categoria-titulo{
+		font-size: 1rem;
+	}
+}
+
+.app-header{
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	background: var(--bg-card);
+	padding: 12px 16px;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.app-header h1{
+	margin: 0;
+	font-size: 1.4rem;
+	text-align: center;
+}
+
+mark{
+	background-color: var(--primary);
+	color: white;
+	padding: 0 4px;
+	border-radius: 4px;
+}
+
+.acciones {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin: 12px;
+}
+
+.acciones button {
+	padding: 8px 14px;
+	border-radius: 8px;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
+	background: transparent;
+	color: var(--primary);
+	border: 1px solid var(--primary);
+	transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.acciones button:hover{
+	background: var(--primary);
+	color: white;
+	transform: scale(1.03);
+}
+
+.acciones button:first-child {
+	background: var(--primary);
+	color: white;
+}
+
+.acciones button:first-child:hover {
+	filter: brightness(1.1);
+}
+
+.menu-wrapper {
+	position: relative;
+}
+
+.menu-btn {
+	background: transparent;
+	border-radius: 6px;
+	padding: 4px 6px;
+	font-size: 18px;
+	cursor: pointer;
+	color: var(--primary);
+}
+
+.menu-opciones {
+	position: absolute;
+	right: 0;
+	top: 28px;
+	background: var(--bg-card);
+	border: 1px solid var(--border-color);
+	border-radius: 10px;
+	box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+	display: none;
+	z-index: 1000;
+	min-width: 180px;
+	overflow: hidden;
+	opacity: 0;
+	transform: translateY(-6px) scale(0.98);
+	transition: 
+		opacity 0.15s ease,
+		transform 0.15s ease;
+	pointer-events: none;
+}
+
+.menu-opciones[style*="block"]{
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	pointer-events: auto;
+}
+
+.menu-opciones button {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	padding: 10px 14px;
+	border: none;
+	background: transparent;
+	text-align: left;
+	cursor: pointer;
+	color: var(--text-main);
+	font-size: 0.95rem;
+	transition: background 0.15s ease, padding-left 0.15s ease;
+}
+
+.menu-opciones button:hover {
+	background: color-mix(in srgb, var(--primary) 12%, transparent);
+	padding-left: 18px;
+}
+
+.menu-opciones button:active {
+	background: color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.menu-opciones button + button {
+	border-top: 1px solid var(--border-color);
+}
+
+.menu-opciones button:last-child {
+	color: var(--danger);
+}
+
+.menu-opciones button:last-child:hover {
+	background: color-mix(in srgb, var(--danger) 15%, transparent;
+}
+
+.menu-btn:hover {
+	background: rgba(0,0,0,0.08);
+}
+
