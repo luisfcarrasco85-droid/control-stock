@@ -1,4 +1,4 @@
-:root{
+:root {
 	--bg-main: #f8fafc;
 	--bg-gradient-start: #ffffff;
 	--bg-gradient-end: #f1f5f9;
@@ -22,7 +22,7 @@
 	--shadow-card: 0 2px 4px rgba(0,0,0,0.08);
 }
 
-*, *::before, *::after{
+*, *::before, *::after {
 	box-sizing: border-box;
 }
 
@@ -30,7 +30,7 @@ section h2 {
 	margin-top: 1.5rem;
 }
 
-body.dark{
+body.dark {
 	--bg-main: #0f172a;
 	--bg-gradient-start: #0f172a;
 	--bg-gradient-end: #020617;
@@ -45,7 +45,7 @@ body.dark{
 	--warning-bg: #451a03;
 }
 
-body{
+body {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end));
 	margin: 0;
@@ -53,17 +53,17 @@ body{
 	color: var(--text-main);
 }
 
-#app-container{
+#app-container {
 	max-width: 900px;
 	margin: 0 auto;
 	padding: 20px;
 }
 
-#resumen-turno{
+#resumen-turno {
 	margin-top: 30px;
 }
 
-.resumen-activo{
+.resumen-activo {
 	outline: 2px solid var(--primary);
 	animation: flash 0.8s ease;
 }
@@ -74,7 +74,7 @@ body{
 	100% {background: transparent; }
 }
 
-#buscador{
+#buscador {
 	width: 100%;
 	padding: 10px;
 	margin-bottom: 15px;
@@ -83,7 +83,7 @@ body{
 	border: 1px solid var(--border-color);
 }
 
-#sin-resultados{
+#sin-resultados {
 	text-align: center;
 	padding: 20px;
 	font-size: 1rem;
@@ -91,17 +91,106 @@ body{
 	color: var(--text-main);
 }
 
-h1{
+h1 {
 	margin-top: 0;
 }
 
-.config-section{
+select, button.periodo {
+	padding: 10px 14px;
+	border-radius: 8px;
+	border: 1px solid var(--border-color);
+	background: var(--bg-input);
+	color: var(--text-main);
+	font-size: 0.95rem;
+}
+
+button.periodo {
+	background: var(--primary);
+	color: white;
+	border: none;
+}
+
+#modal-general {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,0.55);
+	display: none;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+}
+
+#modal-general.activo {
+	display: flex;
+}
+
+.modal-contenido {
+	background: var(--bg-card);
+	color: var(--text-main);
+	width: 90%;
+	max-width: 420px;
+	padding: 20px;
+	border-radius: 12px;
+	box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+	animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+	from {
+		transform: translateY(10px) scale(0.95);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+	}
+}
+
+.modal input {
+	width: 100%;
+	margin-top: 10px;
+	padding: 10px;
+	font-size: 1rem;
+	border-radius: 8px;
+	border: 1px solid var(--border-color);
+	background: var(--bg-input);
+	color: var(--text-main);
+}
+
+.modal-botones {
+	display: flex;
+	gap: 10px;
+	margin-top: 15px;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+}
+
+.modal-botones button {
+	padding: 10px 14px;
+	border-radius: 8px;
+	border: none;
+	font-size: 0.95rem;
+	cursor: pointer;
+	background: var(--primary);
+	color: white;
+	transition: transform 0.1s, filter 0.2s;
+}
+
+.modal-botones button:hover {
+	filter: brightness(1.1);
+}
+
+.modal-botones button:active {
+	transform: scale(0.97);
+}
+
+.config-section {
 	background: transparent;
 	box-shadow: none;
 	padding: 10px 0 20px;
 }
 
-section{
+section {
 	margin-bottom: 40px;
 	background: var(--bg-section);
 	border-radius: 10px;
@@ -109,11 +198,11 @@ section{
 	box-shadow: var(--shadow-soft);
 }
 
-section + section{
+section + section {
 	border-top: 1px solid var(--border-color);
 }
 
-input{
+input {
 	padding: 8px 10px;
 	margin: 5px;
 	border: 1px solid var(--border-color);
@@ -123,7 +212,7 @@ input{
 	font-size: 1rem;
 }
 
-button{
+button {
 	padding: 8px 12px;
 	margin: 5px 2px;
 	border: none;
@@ -133,25 +222,25 @@ button{
 	transition: background-color 0.2s ease;
 }
 
-button:active{
+button:active {
 	transform: scale(0.97);
 }
 
-button:disabled{
+button:disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
 }
 
-button.vender{
+button.vender {
 	background-color: var(--primary);
 	color: white;
 }
-button.vender:hover{
+button.vender:hover {
 	filter:brightness(0.9);
 }
 
 
-.producto-card{
+.producto-card {
 	gap: 8px;
 	display: flex;
 	flex-direction: column;
@@ -162,32 +251,33 @@ button.vender:hover{
 	margin: 6px 0;
 	box-shadow: var(--shadow-card);
 	position: relative;
+	overflow: visible;
 }
 
-.producto-info{
+.producto-info {
 	margin-bottom: 8px;
 }
 
-.producto-buttons{
+.producto-buttons {
 	display: flex;
 	gap: 6px;
 }
 
-.producto-buttons button{
+.producto-buttons button {
 	flex: 1;
 }
 
-.sin-stock{
+.sin-stock {
 	color: var(--danger);
 	font-weight: bold;
 }
 
-.stock-bajo{
+.stock-bajo {
 	color: #b45309;
 	font-weight: bold;
 }
 
-.categoria-titulo{
+.categoria-titulo {
 	cursor: pointer;
 	font-weight: 600;
 	font-size: 1.1rem;
@@ -201,22 +291,22 @@ button.vender:hover{
 	align-items: center;
 }
 
-body.dark .categoria-titulo{
+body.dark .categoria-titulo {
 	background-color: var(--primary);
 }
 
-.categoria-titulo:hover{
+.categoria-titulo:hover {
 	opacity: 0.85;
 }
 
 
-section.caja-section{
+section.caja-section {
 	margin-bottom: 8px;
 	font-size: 1.1rem;
 	opacity: 0.8;
 }
 
-#caja{
+#caja {
 	margin-top: 25px;
 	background: var(--warning-bg);
 	padding: 15px;
@@ -226,34 +316,34 @@ section.caja-section{
 	box-shadow: var(--shadow-card);
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
 	h1{
 		text-align: center;
 		font-size: 1.4rem;
 	}
 
-	section{
+	section {
 		padding: 15px;
 	}
 
 	input,
-	button{
+	button {
 		width: 100%;
 		box-sizing: border-box;
 		margin: 6px 0;
 		font-size: 1rem;
 	}
 
-	.producto-card{
+	.producto-card {
 		font-size: 0.95rem;
 	}
 
-	.categoria-titulo{
+	.categoria-titulo {
 		font-size: 1rem;
 	}
 }
 
-.app-header{
+.app-header {
 	position: sticky;
 	top: 0;
 	z-index: 100;
@@ -262,13 +352,13 @@ section.caja-section{
 	box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.app-header h1{
+.app-header h1 {
 	margin: 0;
 	font-size: 1.4rem;
 	text-align: center;
 }
 
-mark{
+mark {
 	background-color: var(--primary);
 	color: white;
 	padding: 0 4px;
@@ -294,7 +384,7 @@ mark{
 	transition: background 0.2s, color 0.2s, transform 0.1s;
 }
 
-.acciones button:hover{
+.acciones button:hover {
 	background: var(--primary);
 	color: white;
 	transform: scale(1.03);
@@ -316,24 +406,26 @@ mark{
 .menu-btn {
 	background: transparent;
 	border-radius: 6px;
-	padding: 4px 6px;
-	font-size: 18px;
+	padding: 8px 12px;
+	font-size: 22px;
 	cursor: pointer;
 	color: var(--primary);
+	min-width: 44px;
+	min-height: 44px;
 }
 
 .menu-opciones {
 	position: absolute;
 	right: 0;
-	top: 28px;
+	top: 32px;
 	background: var(--bg-card);
 	border: 1px solid var(--border-color);
 	border-radius: 10px;
 	box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 	display: none;
-	z-index: 1000;
+	z-index: 10;
 	min-width: 180px;
-	overflow: hidden;
+	overflow: visible;
 	opacity: 0;
 	transform: translateY(-6px) scale(0.98);
 	transition: 
@@ -342,7 +434,7 @@ mark{
 	pointer-events: none;
 }
 
-.menu-opciones[style*="block"]{
+.menu-opciones[style*="block"] {
 	opacity: 1;
 	transform: translateY(0) scale(1);
 	pointer-events: auto;
@@ -381,10 +473,9 @@ mark{
 }
 
 .menu-opciones button:last-child:hover {
-	background: color-mix(in srgb, var(--danger) 15%, transparent;
+	background: color-mix(in srgb, var(--danger) 15%, transparent);
 }
 
 .menu-btn:hover {
 	background: rgba(0,0,0,0.08);
 }
-
