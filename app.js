@@ -7,19 +7,32 @@ let productos =
 JSON.parse(localStorage.getItem("productos")) || [];
 let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
 
+function miAlert(mensaje, titulo="Atención", callback){
+	mostrarModal({ tipo: "alert", titulo, mensaje, callback });
+}
+
+function miConfirm(mensaje, titulo="Confirmar", callback) {
+	mostrarModal({ tipo: "confirm", titulo, mensaje, callback });
+}
+
+function miPrompt(mensaje, titulo="Ingresar dato", callback) {
+	mostrarModal({ tipo: "prompt", titulo, mensaje, callback });
+}
+
 function guardarCaja(){
 	localStorage.setItem("cajaInicial", cajaInicial);
 	localStorage.setItem("totalVentas", totalVentas);
 }
 
 function iniciarTurno(){
-	let monto = prompt("Caja inicial");
-	if(monto !==null){
-		cajaInicial = Number(monto);
+	miPrompt("Ingresá la caja inicial", "Caja inicial", (res) => {
+	if(res !==null){
+		cajaInicial = Number(res);
 		totalVentas = 0;
 		guardarCaja();
 		mostrarCaja();
 	}
+	});
 }
 
 function guardarTurnos(){
@@ -107,7 +120,7 @@ function agregarProducto() {
 	let min = Number(document.getElementById("min").value);
 
 	if(!categoria||!producto||!variante||precio <= 0||stock <= 0){
-		alert("Completá bien los datos");
+		miAlert("Completá bien los datos");
 		return;
 }
 	let existente = productos.find(p => 
@@ -170,6 +183,76 @@ function resaltarTexto(texto, busqueda){
 
 	const regex = new RegExp(`(${busqueda})`, "gi");
 	return texto.replace(regex, `<mark>$1</mark>`);
+}
+
+
+function mostrarModal({ tipo="alert", titulo="", mensaje="", callback=null}) {
+	const modal = document.getElementById("modal-general");
+	const modalTitulo = document.getElementById("modal-titulo");
+	const modalMensaje = document.getElementById("modal-mensaje");
+	const modalInput = document.getElementById("modal-input");
+	const botonesDiv = modal.querySelector(".modal-botones");
+	const modalContenido = modal.querySelector(".modal-contenido");
+
+	modalTitulo.textContent = titulo;
+	modalMensaje.innerHTML = mensaje;
+	modalInput.style.display = "none";
+	botonesDiv.innerHTML =  "";
+
+	modal.onclick = null;
+
+	modal.onclick = () => {
+		modal.style.display = "none";
+		if (callback && tipo === "confirm")
+			callback(false);
+		if (callback && tipo === "prompt")
+			callback(null);
+	}
+
+	modalContenido.onclick = (e) => {
+		e.stopPropagation();
+	}
+
+	if(tipo === "alert") {
+		const btnOk = document.createElement("button");
+		btnOk.textContent = "OK";
+		btnOk.onclick = () => { modal.style.display="none"; callback?.(); };
+		botonesDiv.appendChild(btnOk);
+
+	} else if(tipo === "confirm") {
+		const btnYes = document.createElement("button");
+		btnYes.textContent = "Sí";
+		btnYes.onclick = () => { modal.style.display="none"; callback?.(true); };
+
+	const btnNo = document.createElement("button");
+	btnNo.textContent = "No";
+	btnNo.onclick = () => { modal.style.display="none"; callback?.(false); };
+
+	botonesDiv.appendChild(btnYes, btnNo);
+
+	} else if(tipo === "prompt") {
+		modalInput.style.display = "block"; 
+		modalInput.value = "";
+		setTimeout(() => modalInput.focus(), 0);
+
+		const btnOk = document.createElement("button");
+		btnOk.textContent = "Aceptar";
+		btnOk.onclick = () => { 
+			modal.style.display = "none";
+			callback?.(modalInput.value);
+		};
+
+		const btnCancel = document.createElement("button");
+		btnCancel.textContent = "Cancelar";
+		btnCancel.onclick = () => { 
+			modal.style.display="none"; 
+			callback?.(null); 
+		};
+
+		botonesDiv.appendChild(btnOk, btnCancel);
+	}
+	
+	modal.style.display = "flex";
 }
 
 function mostrar(){
@@ -266,7 +349,7 @@ function mostrar(){
 function vender(id){
 	const producto = productos.find(p => p.id === id);
 	if(!producto  || producto.stock <= 0){
-		alert(`No hay stock de ${producto?.producto}`);
+		miAlert(`No hay stock de ${producto?.producto}`);
 		return;
 	}
 
@@ -294,77 +377,89 @@ function editarNombre(id){
 	const producto = productos.find(p => p.id === id);
 	if (!producto) return;
 
-	const nuevoNombre = prompt("Nuevo nombre del producto", producto.producto);
-	if (!nuevoNombre) return;
-
-	producto.producto = nuevoNombre.trim();
-	guardar();
-	mostrar();
+	miPrompt("Nuevo nombre del producto", "Editar producto", (res) => {
+		if(res !== null && res.trim() !== ""){
+			producto.producto = res.trim();
+		guardar();
+		mostrar();
+		}
+	});
 }
 
 function sumarStock(id){
 	let prod = productos.find(p => p.id === id);
-	let cantidad = prompt(`¿Cuánto stock entra para ${prod.producto} (${prod.variante})?`);
+	miPrompt(`¿Cuánto stock entra para ${prod.producto} (${prod.variante})?`, "Ingreso de stock", (res) => {;
 	
-	if(cantidad === null)return;
+	if(res === null)return;
 
-	cantidad = Number(cantidad);
+	const cantidad = Number(res);
 
 	if(cantidad > 0){
 		prod.stock += cantidad;
 		guardar();
 		mostrar();
 	}else{
-		alert("Cantidad inválida");
+		miAlert("Cantidad inválida", "Error");
 	}
+	});
 }
 
 function borrarProducto(id){
-	let prod = productos.find(p=>p.id === id);
-	let ok = confirm(`¿Seguro que querés borrar "${prod.producto} (${prod.variante})"?`);
+	const prod = productos.find(p=> p.id === id);
+	if(!prod) return;
+
+	miConfirm(`¿Seguro que querés borrar "${prod.producto} (${prod.variante})"?`, "Eliminar producto", (ok) => {
 
 	if(!ok) return;
 
 	productos = productos.filter(p => p.id !== id);
 	guardar();
 	mostrar();
+		}
+	);
 }
 
 function cerrarTurno(){
 	document.getElementById("titulo-resumen") ?.scrollIntoView({ behavior: "smooth" });
 	if(ventas.length === 0){
-		alert("No hay ventas para cerrar el turno");
+		miAlert("No hay ventas para cerrar el turno");
 		return;
 	}
 
 	const esperado = cajaInicial + totalVentas;
-	let real = prompt(`Caja esperada: $${esperado}\nCaja real:`);
+	miPrompt(
+	`Caja esperada: <strong>$${esperado}</strong><br>
+	Ingresá la caja real:`, "Cierre de caja", 
+	(res) => {
 
-	if(real === null) return;
-	real = Number(real);
+	if(res === null) return;
+	const real = Number(res);
 
 	const diferencia = real - esperado;
 
 	let mensaje =
-		`Resumen del turno\n\n` +
-		`Caja inicial: $${cajaInicial}\n` +
-		`Total vendido: $${totalVentas}\n` +
-		`Caja esperada: $${esperado}\n` +
-		`Caja real: $${real}\n\n`;
+		`<strong>Resumen del turno</strong><br><br>` +
+		`Caja inicial: $${cajaInicial}<br>` +
+		`Total vendido: $${totalVentas}<br>` +
+		`Caja esperada: $${esperado}<br>` +
+		`Caja real: $${real}<br><br>`;
 
 	if(diferencia === 0){
-		mensaje += "Caja perfecta ✅";
+		mensaje += `<strong style="color: #4CAF50;">Caja perfecta ✅</strong>`;
 	}else if(diferencia > 0){
-		mensaje += `Sobra $${diferencia} ⚠️`;
+		mensaje += `<strong style="color: orange;">Sobra $${diferencia} ⚠️</strong>`;
 	}else{
-		mensaje +=` Falta $${Math.abs(diferencia)} ❌`;
+		mensaje +=`<strong style="color: red;">Falta $${Math.abs(diferencia)} ❌</strong>`;
 	}
-
-	alert(mensaje);
-
-	mostrarResumenTurno();
-
+	
+	
 	const resumenTurno = generarResumenTurno();
+
+	mostrarResumenTurno(resumenTurno);
+	
+	miAlert(mensaje);
+
+
 
 		const turno = {
 			id: Date.now(),
@@ -388,6 +483,9 @@ function cerrarTurno(){
 	guardarVentas();
 	mostrarCaja();
 	mostrarVentas();
+	});
+
+
 }
 
 
@@ -429,12 +527,13 @@ function toggleMenu(id){
 
 function editarPrecio(id){
 	const prod = productos.find(p => p.id === id);
-	let nuevo = prompt(`Nuevo precio para ${prod.producto}:`, prod.precio);
-	if(nuevo !== null){
-		prod.precio = Number(nuevo);
+	miPrompt(`Nuevo precio para ${prod.producto}:`, "Ingresar precio", (res) => {
+	if(res !== null){
+		res = Number(nuevo);
 		guardar();
 		mostrar();
 	}
+	});
 }
 
 const picker = document.getElementById("colorPicker");
@@ -489,7 +588,7 @@ function mostrarResumenTurno(){
 
 function exportarTurnoTXT(){
 	if (ventas.length === 0){
-		alert("No hay ventas para exportar");
+		miAlert("No hay ventas para exportar");
 		return;
 	}
 
@@ -632,7 +731,7 @@ function exportarResumenMensualTXT(){
 	});
 
 	if(filtrados.length === 0){
-		alert("No hay datos para exportar este mes");
+		miAlert("No hay datos para exportar este mes");
 		return;
 	}
 
